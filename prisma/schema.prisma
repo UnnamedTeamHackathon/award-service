@@ -1,0 +1,26 @@
+generator client {
+  provider          = "prisma-client-js"
+  previewFeatures   = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider          = "postgresql"
+  relationMode      = "foreignKeys"
+  url               = env("DATABASE_URL")
+  extensions        = [uuidOssp(map: "uuid-ossp")]
+}
+
+model User {
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+
+  awards Award[]
+}
+
+model Award {
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+
+  name String
+  image_id String? @db.Uuid
+
+  users User[]
+}
